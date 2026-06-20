@@ -1,0 +1,12 @@
+com/banquito/switchpagos/sftp/service/SftpUploadWatcher$FileSnapshot.class
+com/banquito/switchpagos/sftp/config/SftpDemoProperties$DemoUser.class
+com/banquito/switchpagos/sftp/config/SftpDemoProperties.class
+com/banquito/switchpagos/sftp/service/HeaderRucParser.class
+com/banquito/switchpagos/sftp/SftpServiceApplication.class
+com/banquito/switchpagos/sftp/config/JacksonConfig.class
+com/banquito/switchpagos/sftp/service/EmbeddedSftpServer.class
+com/banquito/switchpagos/sftp/service/SftpUploadWatcher.class
+com/banquito/switchpagos/sftp/service/SftpFileProcessor.class
+com/banquito/switchpagos/sftp/client/BatchUploadResult.class
+com/banquito/switchpagos/sftp/client/BatchServiceClient.class
+com/banquito/switchpagos/sftp/config/BatchServiceProperties.class

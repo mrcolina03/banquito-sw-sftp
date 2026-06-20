@@ -1,0 +1,10 @@
+/workspace/src/main/java/com/banquito/switchpagos/sftp/SftpServiceApplication.java
+/workspace/src/main/java/com/banquito/switchpagos/sftp/client/BatchServiceClient.java
+/workspace/src/main/java/com/banquito/switchpagos/sftp/client/BatchUploadResult.java
+/workspace/src/main/java/com/banquito/switchpagos/sftp/config/BatchServiceProperties.java
+/workspace/src/main/java/com/banquito/switchpagos/sftp/config/JacksonConfig.java
+/workspace/src/main/java/com/banquito/switchpagos/sftp/config/SftpDemoProperties.java
+/workspace/src/main/java/com/banquito/switchpagos/sftp/service/EmbeddedSftpServer.java
+/workspace/src/main/java/com/banquito/switchpagos/sftp/service/HeaderRucParser.java
+/workspace/src/main/java/com/banquito/switchpagos/sftp/service/SftpFileProcessor.java
+/workspace/src/main/java/com/banquito/switchpagos/sftp/service/SftpUploadWatcher.java
