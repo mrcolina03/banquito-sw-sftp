@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
@@ -48,7 +49,9 @@ public class BatchServiceClient {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", new FileSystemResource(file));
         body.add("companyRuc", companyRuc);
-        body.add("companyCustomerUuid", companyCustomerUuid);
+        if (StringUtils.hasText(companyCustomerUuid)) {
+            body.add("companyCustomerUuid", companyCustomerUuid);
+        }
         body.add("channel", "SFTP");
         body.add("receivedBy", username);
 

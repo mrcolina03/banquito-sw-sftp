@@ -38,25 +38,16 @@ public class SftpFileProcessor {
     }
 
     public void process(Path file) {
-        String username = properties.getDemoUser().getUsername();
-        String expectedRuc = properties.getDemoUser().getCompanyRuc();
-        String companyCustomerUuid = properties.getDemoUser().getCustomerUuid();
+        String username = "sftp";
         try {
             String headerRuc = headerRucParser.readCompanyRuc(file);
-            if (!expectedRuc.equals(headerRuc)) {
-                reject(file, username, "HEADER_RUC_MISMATCH",
-                        "El RUC de cabecera no coincide con el usuario SFTP autenticado.",
-                        headerRuc, null);
-                return;
-            }
-
             BatchUploadResult result = batchServiceClient.upload(
                     file,
-                    expectedRuc,
-                    companyCustomerUuid,
+                    headerRuc,
+                    null,
                     username);
             if (result.accepted()) {
-                moveToProcessed(file, username, result);
+                moveToProcessed(file, username, headerRuc, result);
             } else {
                 reject(file, username, result.errorCode(), result.message(), headerRuc, result);
             }
@@ -65,13 +56,13 @@ public class SftpFileProcessor {
         }
     }
 
-    private void moveToProcessed(Path file, String username, BatchUploadResult result) throws IOException {
+    private void moveToProcessed(Path file, String username, String companyRuc, BatchUploadResult result) throws IOException {
         Path userDirectory = properties.getProcessedDirectory().resolve(username);
         Files.createDirectories(userDirectory);
         Path target = uniqueTarget(userDirectory, file.getFileName().toString());
         Files.move(file, target, StandardCopyOption.REPLACE_EXISTING);
 
-        ObjectNode metadata = baseMetadata(target, username, properties.getDemoUser().getCompanyRuc(), "PROCESSED");
+        ObjectNode metadata = baseMetadata(target, username, companyRuc, "PROCESSED");
         metadata.put("batchId", result.batchId());
         metadata.put("batchStatus", result.status());
         metadata.put("httpStatus", result.httpStatus());
@@ -96,7 +87,6 @@ public class SftpFileProcessor {
             ObjectNode metadata = baseMetadata(target, username, headerRuc, "REJECTED");
             metadata.put("reasonCode", reasonCode);
             metadata.put("reasonMessage", reasonMessage);
-            metadata.put("expectedCompanyRuc", properties.getDemoUser().getCompanyRuc());
             if (result != null) {
                 metadata.put("httpStatus", result.httpStatus());
                 metadata.put("batchServiceMessage", result.message());
