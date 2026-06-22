@@ -40,10 +40,15 @@ public class BatchServiceClient {
                 .build();
     }
 
-    public BatchUploadResult upload(Path file, String companyRuc, String username) {
+    public BatchUploadResult upload(
+            Path file,
+            String companyRuc,
+            String companyCustomerUuid,
+            String username) {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", new FileSystemResource(file));
         body.add("companyRuc", companyRuc);
+        body.add("companyCustomerUuid", companyCustomerUuid);
         body.add("channel", "SFTP");
         body.add("receivedBy", username);
 

@@ -4,7 +4,6 @@ import com.banquito.switchpagos.sftp.config.SftpDemoProperties;
 import jakarta.annotation.PreDestroy;
 import org.apache.sshd.common.file.virtualfs.VirtualFileSystemFactory;
 import org.apache.sshd.server.SshServer;
-import org.apache.sshd.server.auth.password.PasswordAuthenticator;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 import org.apache.sshd.sftp.server.SftpSubsystemFactory;
 import org.slf4j.Logger;
@@ -24,10 +23,14 @@ public class EmbeddedSftpServer {
     private static final Logger LOG = LoggerFactory.getLogger(EmbeddedSftpServer.class);
 
     private final SftpDemoProperties properties;
+    private final CoreR9iPasswordAuthenticator passwordAuthenticator;
     private SshServer sshServer;
 
-    public EmbeddedSftpServer(SftpDemoProperties properties) {
+    public EmbeddedSftpServer(
+            SftpDemoProperties properties,
+            CoreR9iPasswordAuthenticator passwordAuthenticator) {
         this.properties = properties;
+        this.passwordAuthenticator = passwordAuthenticator;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -43,7 +46,7 @@ public class EmbeddedSftpServer {
         sshServer.setPort(properties.getPort());
         sshServer.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(
                 properties.getBaseDirectory().resolve("hostkey.ser")));
-        sshServer.setPasswordAuthenticator(passwordAuthenticator());
+        sshServer.setPasswordAuthenticator(passwordAuthenticator);
         sshServer.setFileSystemFactory(new VirtualFileSystemFactory(properties.getBaseDirectory()));
         sshServer.setSubsystemFactories(List.of(new SftpSubsystemFactory.Builder().build()));
         sshServer.start();
@@ -57,12 +60,6 @@ public class EmbeddedSftpServer {
         if (sshServer != null && sshServer.isOpen()) {
             sshServer.stop();
         }
-    }
-
-    private PasswordAuthenticator passwordAuthenticator() {
-        return (username, password, session) ->
-                properties.getDemoUser().getUsername().equals(username)
-                        && properties.getDemoUser().getPassword().equals(password);
     }
 
     private void createDirectories() throws IOException {

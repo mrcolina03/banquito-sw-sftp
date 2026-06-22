@@ -91,8 +91,8 @@ public class SftpDemoProperties {
 
     public static class DemoUser {
         private String username = "empresa.sierraazul";
-        private String password = "Password123!";
         private String companyRuc = "1792103456001";
+        private String customerUuid = "3f26a20e-c149-5666-84b9-7c8ce0ed2712";
 
         public String getUsername() {
             return username;
@@ -102,20 +102,20 @@ public class SftpDemoProperties {
             this.username = username;
         }
 
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
         public String getCompanyRuc() {
             return companyRuc;
         }
 
         public void setCompanyRuc(String companyRuc) {
             this.companyRuc = companyRuc;
+        }
+
+        public String getCustomerUuid() {
+            return customerUuid;
+        }
+
+        public void setCustomerUuid(String customerUuid) {
+            this.customerUuid = customerUuid;
         }
     }
 }

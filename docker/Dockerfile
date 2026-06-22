@@ -1,23 +1,11 @@
-﻿# --- Stage 1: Construir el .jar ---
-FROM maven:3.9.6-eclipse-temurin-21 AS build
-WORKDIR /app
-
-# Copiamos el pom.xml y el código fuente
+FROM maven:3.9.9-eclipse-temurin-21 AS build
+WORKDIR /workspace
 COPY pom.xml .
 COPY src ./src
+RUN mvn -q -DskipTests package
 
-# Compilamos el proyecto omitiendo los tests (ya pasaron en el CI.yml)
-RUN mvn clean package -DskipTests
-
-# --- Stage 2: Imagen final ---
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:21-jre
 WORKDIR /app
-
-
-# Copiamos el .jar generado en el stage anterior a la imagen final
-COPY --from=build /app/target/*.jar app.jar
-
-# Exponemos el puerto por defecto de Spring Boot (puedes cambiarlo si usas otro)
-EXPOSE 8083
-
+COPY --from=build /workspace/target/*.jar app.jar
+EXPOSE 2222 8090
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

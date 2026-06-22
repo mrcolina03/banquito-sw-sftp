@@ -40,6 +40,7 @@ public class SftpFileProcessor {
     public void process(Path file) {
         String username = properties.getDemoUser().getUsername();
         String expectedRuc = properties.getDemoUser().getCompanyRuc();
+        String companyCustomerUuid = properties.getDemoUser().getCustomerUuid();
         try {
             String headerRuc = headerRucParser.readCompanyRuc(file);
             if (!expectedRuc.equals(headerRuc)) {
@@ -49,7 +50,11 @@ public class SftpFileProcessor {
                 return;
             }
 
-            BatchUploadResult result = batchServiceClient.upload(file, expectedRuc, username);
+            BatchUploadResult result = batchServiceClient.upload(
+                    file,
+                    expectedRuc,
+                    companyCustomerUuid,
+                    username);
             if (result.accepted()) {
                 moveToProcessed(file, username, result);
             } else {
